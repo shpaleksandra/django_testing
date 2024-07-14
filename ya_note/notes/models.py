@@ -1,8 +1,10 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from pytils.translit import slugify
 
+User = get_user_model()
 
 class Note(models.Model):
     title = models.CharField(
