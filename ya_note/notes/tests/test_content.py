@@ -26,15 +26,15 @@ class TestDetailNote(TestCase):
         cls.list_url = reverse('notes:list')
 
     def test_note_on_list_of_notes(self):
-            response = self.author_client.get(self.list_url)
-            object_list = response.context['object_list']
-            self.assertEqual(object_list[0], self.note)
+        response = self.author_client.get(self.list_url)
+        object_list = response.context['object_list']
+        self.assertEqual(object_list[0], self.note)
 
     def test_note_not_in_list_for_another_user(self):
-            url = reverse('notes:list')
-            response = self.user_client.get(url)
-            object_list = response.context['object_list']
-            self.assertNotIn(self.note, object_list)
+        url = reverse('notes:list')
+        response = self.user_client.get(url)
+        object_list = response.context['object_list']
+        self.assertNotIn(self.note, object_list)
 
     def test_add_and_edit_forms(self):
         for name, args in (

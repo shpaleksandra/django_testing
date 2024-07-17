@@ -1,8 +1,8 @@
 import pytest
 from django.conf import settings
-from django.urls import reverse
 
 pytestmark = pytest.mark.django_db
+
 
 def test_news_count(all_news_list, get_url_news_home, client):
     response = client.get(get_url_news_home)
@@ -36,7 +36,7 @@ def test_comments_order(all_news_list, get_url_news_detail, client):
         (pytest.lazy_fixture('author_client'), True),
     ),
 )
-def test_pages_contains_form(news, parametrized_client, expected_status, 
+def test_pages_contains_form(news, parametrized_client, expected_status,
                              get_url_news_detail):
     response = parametrized_client.get(get_url_news_detail)
     assert ('form' in response.context) is expected_status

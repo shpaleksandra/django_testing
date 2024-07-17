@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from notes.models import Note, User
 
+
 class TestRoutes(TestCase):
 
     @classmethod
@@ -79,4 +80,3 @@ class TestRoutes(TestCase):
                     redirect_url = f'{login_url}?next={url}'
                     response = self.client.get(url)
                     self.assertRedirects(response, redirect_url)
-

@@ -10,8 +10,10 @@ from news.models import Comment
 
 pytestmark = pytest.mark.django_db
 
+
 @pytest.mark.django_db
-def test_anonymous_user_cant_create_comment(get_url_news_detail, client, form_data):
+def test_anonymous_user_cant_create_comment(get_url_news_detail,
+                                            client, form_data):
     comments_before = Comment.objects.count()
     response = client.post(get_url_news_detail, data=form_data)
     assert response.status_code == HTTPStatus.FOUND
@@ -19,17 +21,21 @@ def test_anonymous_user_cant_create_comment(get_url_news_detail, client, form_da
     assert comments_before == comments_after
 
 
-def test_user_can_create_comment(not_author_client, get_url_news_detail, form_data):
+def test_user_can_create_comment(not_author_client,
+                                 get_url_news_detail,
+                                 form_data):
     comments_before = Comment.objects.count()
-    response = not_author_client.post(get_url_news_detail, data=form_data)  
+    response = not_author_client.post(get_url_news_detail, data=form_data)
     assertRedirects(response, f'{get_url_news_detail}#comments')
     comments_after = Comment.objects.count()
     assert comments_after == comments_before + 1
     
 
-
-def test_user_cant_use_bad_words(get_url_news_detail, not_author_client, bad_words_fixture):
-    response = not_author_client.post(get_url_news_detail, data=bad_words_fixture)
+def test_user_cant_use_bad_words(get_url_news_detail,
+                                 not_author_client,
+                                 bad_words_fixture):
+    response = not_author_client.post(get_url_news_detail,
+                                      data=bad_words_fixture)
     assertFormError(
         response,
         form='form',
@@ -62,7 +68,8 @@ def test_user_cant_delete_comment_of_another_user(
 
 
 def test_author_can_edit_comment(
-        author_client, comment, get_url_comment_edit, get_url_news_detail, form_data
+        author_client, comment, get_url_comment_edit, 
+        get_url_news_detail, form_data
 ):
     response = author_client.post(get_url_comment_edit, data=form_data)
     assertRedirects(response, f'{get_url_news_detail}#comments')

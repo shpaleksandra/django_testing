@@ -6,15 +6,16 @@ from pytest_django.asserts import assertRedirects
 
 pytestmark = pytest.mark.django_db
 
+
 @pytest.mark.parametrize(
     'name',
     ('news:home', 'users:login', 'users:logout', 'users:signup')
 )
-
 def test_pages_availability_for_anonymous_user(client, name):
     url = reverse(name)
     response = client.get(url)
     assert response.status_code == HTTPStatus.OK
+
 
 def test_detail_page_availability(get_url_news_detail, client):
     response = client.get(get_url_news_detail)

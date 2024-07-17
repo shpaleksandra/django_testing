@@ -6,6 +6,7 @@ from pytils.translit import slugify
 
 User = get_user_model()
 
+
 class Note(models.Model):
     title = models.CharField(
         'Заголовок',
