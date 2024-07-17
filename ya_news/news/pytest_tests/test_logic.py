@@ -29,7 +29,7 @@ def test_user_can_create_comment(not_author_client,
     assertRedirects(response, f'{get_url_news_detail}#comments')
     comments_after = Comment.objects.count()
     assert comments_after == comments_before + 1
-    
+
 
 def test_user_cant_use_bad_words(get_url_news_detail,
                                  not_author_client,
@@ -68,7 +68,7 @@ def test_user_cant_delete_comment_of_another_user(
 
 
 def test_author_can_edit_comment(
-        author_client, comment, get_url_comment_edit, 
+        author_client, comment, get_url_comment_edit,
         get_url_news_detail, form_data
 ):
     response = author_client.post(get_url_comment_edit, data=form_data)

@@ -45,13 +45,13 @@ class TestNoteCreation(TestCase):
             title='Заголовок',
             text='Текст',
             author=self.user,
-            )
+        )
         new_data = {
             'title': 'Новый заголовок',
             'text': 'Новый текст',
             'author': self.user,
             'slug': self.note.slug,
-            }
+        }
         response = self.auth_client.post(self.add_url, data=new_data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertFormError(
@@ -59,7 +59,7 @@ class TestNoteCreation(TestCase):
             form='form',
             field='slug',
             errors=(self.note.slug + WARNING),
-            )
+        )
         notes_count = Note.objects.count()
         self.assertNotEqual(notes_count, 2)
 
