@@ -58,12 +58,11 @@ def all_news_list():
 
 @pytest.fixture
 def comment(news, author):
-    comment = Comment.objects.create(
+    return Comment.objects.create(
         news=news,
         author=author,
         text='Текст комментария',
     )
-    return comment
 
 
 @pytest.fixture
