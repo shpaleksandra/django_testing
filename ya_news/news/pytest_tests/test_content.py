@@ -16,9 +16,7 @@ def test_news_count(all_news_list, get_url_news_home, client):
 
 
 def test_news_order(all_news_list, get_url_news_home, client):
-    """
-    Новости отсортированы от самой свежей к самой старой
-    """
+    """Новости отсортированы от самой свежей к самой старой"""
     response = client.get(get_url_news_home)
     object_list = response.context['object_list']
     all_dates = [news.date for news in object_list]

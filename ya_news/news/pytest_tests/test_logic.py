@@ -14,9 +14,7 @@ pytestmark = pytest.mark.django_db
 @pytest.mark.django_db
 def test_anonymous_user_cant_create_comment(get_url_news_detail,
                                             client, form_data):
-    """
-    Анонимный пользователь не может отправить комментарий.
-    """
+    """Анонимный пользователь не может отправить комментарий."""
     comments_before = Comment.objects.count()
     response = client.post(get_url_news_detail, data=form_data)
     assert response.status_code == HTTPStatus.FOUND
@@ -27,9 +25,7 @@ def test_anonymous_user_cant_create_comment(get_url_news_detail,
 def test_user_can_create_comment(not_author_client,
                                  get_url_news_detail,
                                  form_data):
-    """
-    Авторизованный пользователь может отправить комментарий.
-    """
+    """Авторизованный пользователь может отправить комментарий."""
     comments_before = Comment.objects.count()
     response = not_author_client.post(get_url_news_detail, data=form_data)
     assertRedirects(response, f'{get_url_news_detail}#comments')

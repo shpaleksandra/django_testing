@@ -24,9 +24,7 @@ class TestNoteCreation(TestCase):
                          }
 
     def test_auth_user_can_create_note(self):
-        """
-        Залогиненный пользователь может создать заметку
-        """
+        """Залогиненный пользователь может создать заметку"""
         response = self.auth_client.post(self.add_url, data=self.form_data)
         self.assertRedirects(response, self.done_url)
         notes_count = Note.objects.count()
@@ -35,9 +33,7 @@ class TestNoteCreation(TestCase):
         self.assertEqual(note, Note.objects.get())
 
     def test_anonymous_cant_create_note(self):
-        """
-        Анонимный пользователь не может создать заметку
-        """
+        """Анонимный пользователь не может создать заметку"""
         login_url = reverse('users:login')
         response = self.client.post(self.add_url, data=self.form_data)
         expected_url = f'{login_url}?next={self.add_url}'
@@ -45,11 +41,8 @@ class TestNoteCreation(TestCase):
         notes_count = Note.objects.count()
         self.assertEqual(notes_count, 0)
 
-
     def test_authorized_user_cant_use_same_slug(self):
-        """
-        Невозможно создать две заметки с одинаковым slug.
-        """
+        """Невозможно создать две заметки с одинаковым slug."""
         self.note = Note.objects.create(
             title='Заголовок',
             text='Текст',
@@ -119,18 +112,14 @@ class TestNoteEditDelete(TestCase):
         }
 
     def test_author_can_delete_note(self):
-        """
-        Пользователь может удалять свои заметки
-        """
+        """Пользователь может удалять свои заметки"""
         response = self.author_client.delete(self.delete_url)
         self.assertRedirects(response, self.done_url)
         notes_count = Note.objects.count()
         self.assertEqual(notes_count, 0)
 
     def test_user_cant_delete_note_of_another_user(self):
-        """
-        Пользователь не может удалять чужие заметки.
-        """
+        """Пользователь не может удалять чужие заметки."""
         notes_count = Note.objects.count()
         response = self.user_client.delete(self.delete_url)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
@@ -138,18 +127,14 @@ class TestNoteEditDelete(TestCase):
         self.assertEqual(notes_count, notes_count_after)
 
     def test_author_can_edit_note(self):
-        """
-        Пользователь может редактировать свои заметки
-        """
+        """Пользователь может редактировать свои заметки"""
         response = self.author_client.post(self.edit_url, data=self.form_data)
         self.assertRedirects(response, self.done_url)
         self.note.refresh_from_db()
         self.assertEqual(self.note.text, self.NEW_TEXT)
 
     def test_user_cant_edit_note_of_another_user(self):
-        """
-        Пользователь не может редактировать чужие заметки.
-        """
+        """Пользователь не может редактировать чужие заметки."""
         response = self.user_client.post(self.edit_url, data=self.form_data)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
         self.note.refresh_from_db()
