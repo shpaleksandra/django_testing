@@ -68,15 +68,8 @@ class TestRoutes(TestCase):
             ('notes:list', None),
         )
         for name, arg in urls:
-            if arg is None:
-                with self.subTest(name=name):
-                    url = reverse(name)
-                    redirect_url = f'{login_url}?next={url}'
-                    response = self.client.get(url)
-                    self.assertRedirects(response, redirect_url)
-            else:
-                with self.subTest(name=name, arg=arg):
-                    url = reverse(name, args=arg)
-                    redirect_url = f'{login_url}?next={url}'
-                    response = self.client.get(url)
-                    self.assertRedirects(response, redirect_url)
+            with self.subTest(name=name, arg=arg):
+                url = reverse(name, args=arg)
+                redirect_url = f'{login_url}?next={url}'
+                response = self.client.get(url)
+                self.assertRedirects(response, redirect_url)

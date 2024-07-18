@@ -39,7 +39,7 @@ class TestNoteCreation(TestCase):
         notes_count = Note.objects.count()
         self.assertEqual(notes_count, 0)
 
-# Невозможно создать две заметки с одинаковым slug.
+
     def test_authorized_user_cant_use_same_slug(self):
         self.note = Note.objects.create(
             title='Заголовок',
