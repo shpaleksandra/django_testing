@@ -12,12 +12,20 @@ pytestmark = pytest.mark.django_db
     ('news:home', 'users:login', 'users:logout', 'users:signup')
 )
 def test_pages_availability_for_anonymous_user(client, name):
+    """
+    Главная стрнаница, страницы регистрации, входа и выхода
+    доступны для анонимного пользователя
+    """
     url = reverse(name)
     response = client.get(url)
     assert response.status_code == HTTPStatus.OK
 
 
 def test_detail_page_availability(get_url_news_detail, client):
+    """
+    Страница отдельной новости
+    доступна для анонимного пользователя
+    """
     response = client.get(get_url_news_detail)
     assert response.status_code == HTTPStatus.OK
 
@@ -39,6 +47,12 @@ def test_detail_page_availability(get_url_news_detail, client):
 def test_edit_delete_comment_for_different_users(
         parametrized_client, get_url, expected_status
 ):
+    """
+    Страницы удаления и редактирования комментария
+    доступны автору, а также авторизованный пользователь
+    не может зайти на редактирование и удаление чужих
+    комментариев
+    """
     response = parametrized_client.get(get_url)
     assert response.status_code == expected_status
 
@@ -51,6 +65,10 @@ def test_edit_delete_comment_for_different_users(
     ),
 )
 def redirect_to_login_from_comments(get_url, url_user_login, client):
+    """
+    Редирект анонимного пользователя при попытке
+    редактирования или удаления комментария
+    """
     expected_url = f'{url_user_login}?next={get_url}'
     response = client.get(get_url)
     assertRedirects(response, expected_url)

@@ -14,6 +14,9 @@ pytestmark = pytest.mark.django_db
 @pytest.mark.django_db
 def test_anonymous_user_cant_create_comment(get_url_news_detail,
                                             client, form_data):
+    """
+    Анонимный пользователь не может отправить комментарий.
+    """
     comments_before = Comment.objects.count()
     response = client.post(get_url_news_detail, data=form_data)
     assert response.status_code == HTTPStatus.FOUND
@@ -24,6 +27,9 @@ def test_anonymous_user_cant_create_comment(get_url_news_detail,
 def test_user_can_create_comment(not_author_client,
                                  get_url_news_detail,
                                  form_data):
+    """
+    Авторизованный пользователь может отправить комментарий.
+    """
     comments_before = Comment.objects.count()
     response = not_author_client.post(get_url_news_detail, data=form_data)
     assertRedirects(response, f'{get_url_news_detail}#comments')
@@ -34,6 +40,10 @@ def test_user_can_create_comment(not_author_client,
 def test_user_cant_use_bad_words(get_url_news_detail,
                                  not_author_client,
                                  bad_words_fixture):
+    """
+    Если комментарий содержит запрещённые слова,
+    он не будет опубликован, а форма вернёт ошибку.
+    """
     response = not_author_client.post(get_url_news_detail,
                                       data=bad_words_fixture)
     assertFormError(
@@ -49,6 +59,10 @@ def test_user_cant_use_bad_words(get_url_news_detail,
 def test_author_can_delete_comment(
         author_client, get_url_comment_delete, get_url_news_detail
 ):
+    """
+    Авторизованный пользователь может
+    удалять свои комментарии.
+    """
     comments_before = Comment.objects.count()
     response = author_client.delete(get_url_comment_delete)
     assertRedirects(response, f'{get_url_news_detail}#comments')
@@ -60,6 +74,10 @@ def test_author_can_delete_comment(
 def test_user_cant_delete_comment_of_another_user(
         get_url_comment_delete, admin_client,
 ):
+    """
+    Авторизованный пользователь не может
+    удалять чужие комментарии.
+    """
     comments_before = Comment.objects.count()
     response = admin_client.delete(get_url_comment_delete)
     assert response.status_code == HTTPStatus.NOT_FOUND
@@ -71,6 +89,10 @@ def test_author_can_edit_comment(
         author_client, comment, get_url_comment_edit,
         get_url_news_detail, form_data
 ):
+    """
+    Авторизованный пользователь может
+    редактировать свои комментарии.
+    """
     response = author_client.post(get_url_comment_edit, data=form_data)
     assertRedirects(response, f'{get_url_news_detail}#comments')
     comment = get_object_or_404(Comment, pk=comment.pk)
@@ -80,6 +102,10 @@ def test_author_can_edit_comment(
 def test_user_cant_edit_comment_of_another_user(
         get_url_comment_edit, comment, not_author_client, form_data
 ):
+    """
+    Авторизованный пользователь не может
+    редактировать чужие комментарии.
+    """
     response = not_author_client.post(get_url_comment_edit, data=form_data)
     assert response.status_code == HTTPStatus.NOT_FOUND
     comment = get_object_or_404(Comment, pk=comment.pk)

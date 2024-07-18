@@ -5,6 +5,10 @@ pytestmark = pytest.mark.django_db
 
 
 def test_news_count(all_news_list, get_url_news_home, client):
+    """
+    Количество новостей на главной странице —
+    не более 10.
+    """
     response = client.get(get_url_news_home)
     object_list = response.context['object_list']
     news_count = object_list.count()
@@ -12,6 +16,9 @@ def test_news_count(all_news_list, get_url_news_home, client):
 
 
 def test_news_order(all_news_list, get_url_news_home, client):
+    """
+    Новости отсортированы от самой свежей к самой старой
+    """
     response = client.get(get_url_news_home)
     object_list = response.context['object_list']
     all_dates = [news.date for news in object_list]
@@ -20,6 +27,10 @@ def test_news_order(all_news_list, get_url_news_home, client):
 
 
 def test_comments_order(all_news_list, get_url_news_detail, client):
+    """
+    Комментарии на странице отдельной новости отсортированы
+    в хронологическом порядке
+    """
     response = client.get(get_url_news_detail)
     news = response.context['news']
     comments = news.comment_set.all()
@@ -38,5 +49,10 @@ def test_comments_order(all_news_list, get_url_news_detail, client):
 )
 def test_pages_contains_form(news, parametrized_client, expected_status,
                              get_url_news_detail):
+    """
+    Анонимному пользователю недоступна форма для отправки
+    комментария на странице отдельной новости,
+    а авторизованному доступна.
+    """
     response = parametrized_client.get(get_url_news_detail)
     assert ('form' in response.context) is expected_status
