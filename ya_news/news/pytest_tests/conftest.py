@@ -1,5 +1,6 @@
 import pytest
-from datetime import datetime, timedelta
+from datetime import timedelta
+from django.utils import timezone
 
 from django.conf import settings
 from django.urls import reverse
@@ -35,16 +36,15 @@ def not_author_client(not_author):
 
 @pytest.fixture
 def news():
-    news = News.objects.create(
+    return News.objects.create(
         title='Заголовок',
         text='Текст',
     )
-    return news
 
 
 @pytest.fixture
 def all_news_list():
-    today = datetime.today()
+    today = timezone.now()
     all_news = []
     for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1):
         one_news = News(

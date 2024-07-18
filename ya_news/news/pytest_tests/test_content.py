@@ -21,11 +21,11 @@ def test_news_order(all_news_list, get_url_news_home, client):
 
 def test_comments_order(all_news_list, get_url_news_detail, client):
     response = client.get(get_url_news_detail)
-    assert 'news' in response.context
     news = response.context['news']
     comments = news.comment_set.all()
     dates = [comment.created for comment in comments]
     dates_sorted = sorted(dates)
+    assert 'news' in response.context
     assert dates == dates_sorted
 
 
