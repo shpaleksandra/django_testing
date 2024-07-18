@@ -81,7 +81,8 @@ def test_author_can_edit_comment(
 ):
     """
     Авторизованный пользователь может редактировать
-    свои комментарии."""
+    свои комментарии.
+    """
     response = author_client.post(get_url_comment_edit, data=form_data)
     assertRedirects(response, f'{get_url_news_detail}#comments')
     comment = get_object_or_404(Comment, pk=comment.pk)
