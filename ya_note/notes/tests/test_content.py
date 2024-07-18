@@ -29,7 +29,7 @@ class TestDetailNote(TestCase):
         """
         Отдельная заметка передаётся на страницу
         со списком заметок в списке
-        object_list в словаре context
+        object_list в словаре context.
         """
         response = self.author_client.get(self.list_url)
         object_list = response.context['object_list']
@@ -38,7 +38,7 @@ class TestDetailNote(TestCase):
     def test_note_not_in_list_for_another_user(self):
         """
         В список заметок одного пользователя
-        не попадают заметки другого пользователя
+        не попадают заметки другого пользователя.
         """
         url = reverse('notes:list')
         response = self.user_client.get(url)
@@ -48,7 +48,7 @@ class TestDetailNote(TestCase):
     def test_add_and_edit_forms(self):
         """
         На страницы создания и редактирования
-        заметки передаются формы
+        заметки передаются формы.
         """
         for name, args in (
             ('notes:edit', (self.note.slug,)),
